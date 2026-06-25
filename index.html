@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>最適クレカカンペ</title>
+    <style>
+        :root {
+            --bg-color: #121212;
+            --card-bg: #1e1e1e;
+            --text-color: #ffffff;
+            --text-muted: #aaaaaa;
+            --btn-bg: #2d2d2d;
+            --btn-active: #444444;
+            
+            /* カテゴリカラー */
+            --color-convenience: #e57373; /* 赤・ピンク系 */
+            --color-super: #64b5f6;       /* 青・紺系 */
+            --color-gourmet: #ffd54f;     /* 黄色・オレンジ系 */
+            --color-cafe: #81c784;        /* 緑系 */
+            --color-other: #ba68c8;       /* 紫系 */
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            padding: 16px;
+            max-width: 480px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            font-size: 20px;
+            margin-bottom: 16px;
+            text-align: center;
+        }
+
+        /* フィルターボタン */
+        .filter-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 20px;
+            justify-content: center;
+            position: sticky;
+            top: 0;
+            background-color: var(--bg-color);
+            padding: 8px 0;
+            z-index: 100;
+        }
+
+        .filter-btn {
+            background-color: var(--btn-bg);
+            color: var(--text-color);
+            border: none;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 13px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .filter-btn.active {
+            background-color: var(--text-color);
+            color: var(--bg-color);
+            font-weight: bold;
+        }
+
+        /* カードリスト */
+        .card-list {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .card {
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            overflow: hidden;
+            padding-bottom: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+        }
+
+        /* 画像を背景にし、見出しを重ねるコンテナ */
+        .card-header-overlay {
+            position: relative;
+            width: 100%;
+            height: auto;
+            aspect-ratio: 53.98 / 33.98; /* カードの比率を維持 */
+            overflow: hidden;
+        }
+
+        .card-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        /* 画像の上に被せる黒いグラデーションマスク(文字の視認性向上用) */
+        .card-header-overlay::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to bottom, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0.7) 100%);
+            pointer-events: none;
+        }
+
+        /* 重ねるカード名見出し */
+        .card-title-overlay {
+            position: absolute;
+            bottom: 12px;
+            left: 12px;
+            right: 12px;
+            font-size: 16px;
+            font-weight: bold;
+            color: #ffffff;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
+            z-index: 2; /* マスクより上に配置 */
+        }
+
+        .card-info {
+            padding: 12px 12px 4px 12px;
+        }
+
+        /* タグコンテナ */
+        .tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+
+        .tag {
+            display: inline-block;
+            font-size: 11px;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-weight: 500;
+            color: #121212;
+            transition: all 0.2s ease;
+        }
+
+        /* タグの色分け設定 */
+        .tag.convenience { background-color: var(--color-convenience); }
+        .tag.super { background-color: var(--color-super); }
+        .tag.gourmet { background-color: var(--color-gourmet); }
+        .tag.cafe { background-color: var(--color-cafe); }
+        .tag.other { background-color: var(--color-other); }
+
+        /* フェードアウト用のスタイル */
+        .tag.fade-out {
+            opacity: 0.15;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>キャッシュレス カンペ</h1>
+
+    <!-- 絞り込みボタン -->
+    <div class="filter-container">
+        <button class="filter-btn active" data-target="all">すべて</button>
+        <button class="filter-btn" data-target="convenience">コンビニ</button>
+        <button class="filter-btn" data-target="super">スーパー</button>
+        <button class="filter-btn" data-target="gourmet">外食</button>
+        <button class="filter-btn" data-target="cafe">カフェ</button>
+        <button class="filter-btn" data-target="other">その他</button>
+    </div>
+
+    <!-- カード一覧 -->
+    <div class="card-list">
+
+        <!-- 三菱UFJカード -->
+        <div class="card">
+            <div class="card-header-overlay">
+                <img src="images/mufg.png" alt="三菱UFJカード" class="card-img">
+                <div class="card-title-overlay">三菱UFJカード(物理カード限定)</div>
+            </div>
+            <div class="card-info">
+                <div class="tags">
+                    <span class="tag convenience">セブンイレブン</span>
+                    <span class="tag convenience">ローソン</span>
+                    <span class="tag cafe">スターバックス</span>
+                    <span class="tag super">オオゼキ</span>
+                    <span class="tag super">肉のハナマサ</span>
+                    <span class="tag super">東急ストア</span>
+                    <span class="tag gourmet">ピザハット</span>
+                    <span class="tag gourmet">くら寿司</span>
+                    <span class="tag gourmet">スシロー</span>
+                    <span class="tag gourmet">松屋</span>
+                    <span class="tag gourmet">ゼッテリア</span>
+                    <span class="tag cafe">上島珈琲店</span>
+                    <span class="tag cafe">カフェ・ド・クリエ</span>
+                    <span class="tag cafe">ドトール</span>
+                    <span class="tag other">アカチャンホンポ</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Olive -->
+        <div class="card">
+            <div class="card-header-overlay">
+                <img src="images/olive.png" alt="Olive Flexible Pay" class="card-img">
+                <div class="card-title-overlay">Olive(スマホ決済・ネットオーダー限定)</div>
+            </div>
+            <div class="card-info">
+                <div class="tags">
+                    <span class="tag gourmet">ケンタッキー</span>
+                    <span class="tag gourmet">モスバーガー</span>
+                    <span class="tag cafe">ドトール</span>
+                    <span class="tag cafe">エクセルシオール</span>
+                    <span class="tag gourmet">すすき家</span>
+                    <span class="tag gourmet">吉野家</span>
+                    <span class="tag gourmet">ガスト</span>
+                    <span class="tag gourmet">サイゼリヤ</span>
+                    <span class="tag gourmet">バーミヤン</span>
+                    <span class="tag gourmet">はま寿司</span>
+                    <span class="tag gourmet">ジョナサン</span>
+                    <span class="tag convenience">ミニストップ</span>
+                    <span class="tag convenience">セブンイレブン</span>
+                    <span class="tag convenience">ローソン</span>
+                    <span class="tag gourmet">COCO'S</span>
+                    <span class="tag cafe">スターバックス</span>
+                    <span class="tag gourmet">マクドナルド</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- JCB CARD W -->
+        <div class="card">
+            <div class="card-header-overlay">
+                <img src="images/jcb_w.png" alt="JCB CARD W" class="card-img">
+                <div class="card-title-overlay">JCB CARD W</div>
+            </div>
+            <div class="card-info">
+                <div class="tags">
+                    <span class="tag other">電車</span>
+                    <span class="tag other">Amazon</span>
+                    <span class="tag cafe">サンマルクカフェ</span>
+                    <span class="tag gourmet">ドミノピザ</span>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        document.querySelectorAll('.filter-btn').forEach(button => {
+            button.addEventListener('click', () => {
+                document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+                button.classList.add('active');
+
+                const target = button.dataset.target;
+                const tags = document.querySelectorAll('.tag');
+
+                tags.forEach(tag => {
+                    if (target === 'all') {
+                        tag.classList.remove('fade-out');
+                    } else {
+                        if (tag.classList.contains(target)) {
+                            tag.classList.remove('fade-out');
+                        } else {
+                            tag.classList.add('fade-out');
+                        }
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
