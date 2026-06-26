@@ -6,7 +6,7 @@
     <title>クレジットカード ポイントアップ店舗リスト</title>
     <style>
         :root {
-            --bg-color: #121212;
+            --bg-color: #000000;
             --card-bg: #1e1e1e;
             --text-color: #ffffff;
             --text-muted: #aaaaaa;
@@ -36,13 +36,13 @@
             margin: 0 auto;
         }
 
-        /* フィルターボタンのコンテナ調整 */
+        /* フィルターボタンのコンテナ */
         .filter-container {
             display: flex;
-            flex-wrap: nowrap; /* 段落ちを絶対に防ぐ */
-            gap: 6px;          /* ボタン間の隙間を少し詰める */
+            flex-wrap: nowrap;
+            gap: 6px;
             margin-bottom: 16px;
-            justify-content: space-between; /* 画面幅いっぱいに綺麗に均等配置 */
+            justify-content: space-between;
             position: sticky;
             top: 0;
             background-color: var(--bg-color);
@@ -50,19 +50,18 @@
             z-index: 100;
         }
 
-        /* フィルターボタンのタイト化 */
         .filter-btn {
-            flex: 1;           /* すべてのボタンを均等な幅に広げる */
+            flex: 1;
             text-align: center;
             background-color: var(--btn-bg);
             color: var(--text-color);
             border: none;
-            padding: 6px 4px;  /* 左右パディングを限界まで詰めて文字落ちを防ぐ */
+            padding: 6px 4px;
             border-radius: 20px;
-            font-size: 11px;   /* スマホの画面幅(360px〜)でも1行に収まるサイズ */
+            font-size: 11px;
             cursor: pointer;
             transition: background-color 0.2s;
-            white-space: nowrap; /* ボタン内での改行も防ぐ */
+            white-space: nowrap;
         }
 
         .filter-btn.active {
@@ -78,54 +77,52 @@
             gap: 16px;
         }
 
+        /* カード自体を相対配置にし、画像を完全な背景にする */
         .card {
+            position: relative;
             background-color: var(--card-bg);
             border-radius: 12px;
             overflow: hidden;
-            padding-bottom: 12px;
             box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+            display: flex;
+            flex-direction: column;
         }
 
-        /* 画像を背景にし、見出しを重ねるコンテナ */
-        .card-header-overlay {
-            position: relative;
-            width: 100%;
-            height: auto;
-            aspect-ratio: 53.98 / 33.98; /* カードの比率を維持 */
-            overflow: hidden;
-        }
-
-        .card-img {
+        /* 最背面に配置する背景画像 */
+        .card-bg-img {
+            position: absolute;
+            inset: 0;
             width: 100%;
             height: 100%;
             object-fit: cover;
-            display: block;
+            object-position: top;
+            z-index: 1;
         }
 
-        /* 画像の上に被せる黒いグラデーションマスク(文字の視認性向上用) */
-        .card-header-overlay::after {
+        /* 【変更】全面に被せる黒グラデーションマスクをより濃いめに調整 */
+        .card::after {
             content: '';
             position: absolute;
             inset: 0;
-            background: linear-gradient(to bottom, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0.7) 100%);
+            /* 上部の不透明度を 0.4 -> 0.55 に、下部を 0.85 -> 0.93 に濃くして視認性を最大化 */
+            background: linear-gradient(to bottom, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.83) 50%, rgba(0,0,0,0.93) 100%);
+            z-index: 2;
             pointer-events: none;
         }
 
-        /* 重ねるカード名見出し */
-        .card-title-overlay {
-            position: absolute;
-            bottom: 12px;
-            left: 12px;
-            right: 12px;
-            font-size: 15px;
-            font-weight: bold;
-            color: #ffffff;
-            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
-            z-index: 2; /* マスクより上に配置 */
+        /* 画像の上に乗せるコンテンツエリア */
+        .card-content {
+            position: relative;
+            z-index: 3; /* マスク層より上に配置 */
+            padding: 14px;
         }
 
-        .card-info {
-            padding: 12px 12px 4px 12px;
+        .card-title {
+            font-size: 14px;
+            font-weight: bold;
+            color: #ffffff;
+            margin-bottom: 10px;
+            text-shadow: 0 1px 3px rgba(0,0,0,0.8);
         }
 
         /* タグコンテナ */
@@ -143,6 +140,7 @@
             font-weight: 500;
             color: #121212;
             transition: all 0.2s ease;
+            text-shadow: none;
         }
 
         /* タグの色分け設定 */
@@ -160,7 +158,6 @@
 </head>
 <body>
 
-    <!-- 絞り込みボタン -->
     <div class="filter-container">
         <button class="filter-btn active" data-target="all">すべて</button>
         <button class="filter-btn" data-target="convenience">コンビニ</button>
@@ -170,16 +167,12 @@
         <button class="filter-btn" data-target="other">その他</button>
     </div>
 
-    <!-- カード一覧 -->
     <div class="card-list">
 
-        <!-- 三菱UFJカード -->
         <div class="card">
-            <div class="card-header-overlay">
-                <img src="images/mufg.png" alt="三菱UFJカード" class="card-img">
-                <div class="card-title-overlay">三菱UFJカード(物理カード限定)</div>
-            </div>
-            <div class="card-info">
+            <img src="images/mufg.png" alt="三菱UFJカード" class="card-bg-img">
+            <div class="card-content">
+                <div class="card-title">三菱UFJカード(物理カード限定)</div>
                 <div class="tags">
                     <span class="tag convenience">セブンイレブン</span>
                     <span class="tag convenience">ローソン</span>
@@ -200,13 +193,10 @@
             </div>
         </div>
 
-        <!-- Olive -->
         <div class="card">
-            <div class="card-header-overlay">
-                <img src="images/olive.png" alt="Olive Flexible Pay" class="card-img">
-                <div class="card-title-overlay">Olive(スマホ決済・ネットオーダー限定)</div>
-            </div>
-            <div class="card-info">
+            <img src="images/olive.png" alt="Olive Flexible Pay" class="card-bg-img">
+            <div class="card-content">
+                <div class="card-title">Olive(スマホ決済・ネットオーダー限定)</div>
                 <div class="tags">
                     <span class="tag gourmet">ケンタッキー</span>
                     <span class="tag gourmet">モスバーガー</span>
@@ -218,27 +208,26 @@
                     <span class="tag gourmet">サイゼリヤ</span>
                     <span class="tag gourmet">バーミヤン</span>
                     <span class="tag gourmet">はま寿司</span>
+                    <span class="tag gourmet">かっぱ寿司</span>
                     <span class="tag gourmet">ジョナサン</span>
+                    <span class="tag gourmet">COCO'S</span>
                     <span class="tag convenience">ミニストップ</span>
                     <span class="tag convenience">セブンイレブン</span>
                     <span class="tag convenience">ローソン</span>
-                    <span class="tag gourmet">COCO'S</span>
                     <span class="tag cafe">スターバックス</span>
                     <span class="tag gourmet">マクドナルド</span>
                 </div>
             </div>
         </div>
 
-        <!-- JCB CARD W -->
         <div class="card">
-            <div class="card-header-overlay">
-                <img src="images/jcb_w.png" alt="JCB CARD W" class="card-img">
-                <div class="card-title-overlay">JCB CARD W</div>
-            </div>
-            <div class="card-info">
+            <img src="images/jcb_w.png" alt="JCB CARD W" class="card-bg-img">
+            <div class="card-content">
+                <div class="card-title">JCB CARD W</div>
                 <div class="tags">
                     <span class="tag other">電車</span>
                     <span class="tag other">Amazon</span>
+                    <span class="tag gourmet">マクドナルド(MO限定)</span>
                     <span class="tag cafe">サンマルクカフェ</span>
                     <span class="tag gourmet">ドミノピザ</span>
                 </div>
