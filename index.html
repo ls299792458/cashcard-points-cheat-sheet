@@ -19,6 +19,7 @@
             --color-gourmet: #ffd54f;     /* 黄色・オレンジ系 */
             --color-cafe: #81c784;        /* 緑系 */
             --color-other: #ba68c8;       /* 紫系 */
+            --color-gray: #666666;        /* 他のがお得 */
         }
 
         * {
@@ -126,6 +127,11 @@
             text-shadow: 0 1px 3px rgba(0,0,0,0.8);
         }
 
+        .card-title a {
+            color: inherit;
+            text-decoration: none;
+        }
+
         /* タグコンテナ */
         .tags {
             display: flex;
@@ -150,10 +156,16 @@
         .tag.gourmet { background-color: var(--color-gourmet); }
         .tag.cafe { background-color: var(--color-cafe); }
         .tag.other { background-color: var(--color-other); }
+        .tag.gray { background-color: var(--color-gray) !important; }
 
         /* フェードアウト用のスタイル */
         .tag.fade-out {
             opacity: 0.15;
+        }
+
+        .tag a {
+            color: inherit;
+            text-decoration: none;
         }
     </style>
 </head>
@@ -173,22 +185,22 @@
         <div class="card">
             <img src="images/mufg.png" alt="三菱UFJカード" class="card-bg-img">
             <div class="card-content">
-                <div class="card-title">三菱UFJカード(物理カード限定)</div>
+                <div class="card-title"><a href="https://www.cr.mufg.jp/mufgcard/point/global/save/convenience_store/index.html#apuriLinkParticipatingStores">三菱UFJカード(物理カード限定)</a></div>
                 <div class="tags">
-                    <span class="tag convenience">セブンイレブン</span>
-                    <span class="tag convenience">ローソン</span>
-                    <span class="tag cafe">スターバックス</span>
                     <span class="tag super">オオゼキ</span>
                     <span class="tag super">肉のハナマサ</span>
                     <span class="tag super">東急ストア</span>
+                    <span class="tag convenience">セブンイレブン</span>
+                    <span class="tag convenience">ローソン</span>
+                    <span class="tag cafe">スターバックス</span>
+                    <span class="tag cafe">上島珈琲店</span>
+                    <span class="tag cafe">カフェ・ド・クリエ</span>
+                    <span class="tag cafe">ドトール</span>
                     <span class="tag gourmet">ピザハット</span>
                     <span class="tag gourmet">くら寿司</span>
                     <span class="tag gourmet">スシロー</span>
                     <span class="tag gourmet">松屋</span>
                     <span class="tag gourmet">ゼッテリア</span>
-                    <span class="tag cafe">上島珈琲店</span>
-                    <span class="tag cafe">カフェ・ド・クリエ</span>
-                    <span class="tag cafe">ドトール</span>
                     <span class="tag other">アカチャンホンポ</span>
                 </div>
             </div>
@@ -197,13 +209,14 @@
         <div class="card">
             <img src="images/olive.png" alt="Olive Flexible Pay" class="card-bg-img">
             <div class="card-content">
-                <div class="card-title">Olive(スマホ決済・ネットオーダー限定)</div>
+                <div class="card-title"><a href="https://www.smbc-card.com/nyukai/merit/proper_p5.jsp#store">Olive(スマホ決済・ネットオーダー限定)</a></div>
                 <div class="tags">
-                    <span class="tag gourmet">ケンタッキー</span>
-                    <span class="tag gourmet">モスバーガー</span>
+                    <span class="tag convenience">ミニストップ</span>
                     <span class="tag cafe">ドトール</span>
                     <span class="tag cafe">エクセルシオール</span>
-                    <span class="tag gourmet">すすき家</span>
+                    <span class="tag gourmet">ケンタッキー</span>
+                    <span class="tag gourmet">モスバーガー</span>
+                    <span class="tag gourmet">すき家</span>
                     <span class="tag gourmet">吉野家</span>
                     <span class="tag gourmet">ガスト</span>
                     <span class="tag gourmet">サイゼリヤ</span>
@@ -212,11 +225,10 @@
                     <span class="tag gourmet">かっぱ寿司</span>
                     <span class="tag gourmet">ジョナサン</span>
                     <span class="tag gourmet">COCO'S</span>
-                    <span class="tag convenience">ミニストップ</span>
-                    <span class="tag convenience">セブンイレブン</span>
-                    <span class="tag convenience">ローソン</span>
-                    <span class="tag cafe">スターバックス</span>
-                    <span class="tag gourmet">マクドナルド</span>
+                    <span class="tag convenience gray">セブンイレブン</span>
+                    <span class="tag convenience gray">ローソン</span>
+                    <span class="tag cafe gray">スターバックス</span>
+                    <span class="tag gourmet gray">マクドナルド</span>
                 </div>
             </div>
         </div>
@@ -224,12 +236,12 @@
         <div class="card">
             <img src="images/jcb_w.png" alt="JCB CARD W" class="card-bg-img">
             <div class="card-content">
-                <div class="card-title">JCB CARD W</div>
+                <div class="card-title"><a href="https://j-pointpartner.jcb.co.jp/">JCB CARD W</a></div>
                 <div class="tags">
-                    <span class="tag other">電車</span>
+                    <span class="tag other"><a href="https://www.jcb.co.jp/point/pop/j-pointpartner/transportation/index.html">電車</a></span>
                     <span class="tag other">Amazon</span>
-                    <span class="tag gourmet">マクドナルド(MO限定)</span>
                     <span class="tag cafe">サンマルクカフェ</span>
+                    <span class="tag gourmet">マクドナルド(MO)</span>
                     <span class="tag gourmet">ドミノピザ</span>
                 </div>
             </div>
