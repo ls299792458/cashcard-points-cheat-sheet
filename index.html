@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>最適クレカカンペ</title>
+    <title>クレジットカード ポイントアップ店舗リスト</title>
     <style>
         :root {
             --bg-color: #121212;
@@ -36,35 +36,33 @@
             margin: 0 auto;
         }
 
-        h1 {
-            font-size: 20px;
-            margin-bottom: 16px;
-            text-align: center;
-        }
-
-        /* フィルターボタン */
+        /* フィルターボタンのコンテナ調整 */
         .filter-container {
             display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-            margin-bottom: 20px;
-            justify-content: center;
+            flex-wrap: nowrap; /* 段落ちを絶対に防ぐ */
+            gap: 6px;          /* ボタン間の隙間を少し詰める */
+            margin-bottom: 16px;
+            justify-content: space-between; /* 画面幅いっぱいに綺麗に均等配置 */
             position: sticky;
             top: 0;
             background-color: var(--bg-color);
-            padding: 8px 0;
+            padding: 10px 0;
             z-index: 100;
         }
 
+        /* フィルターボタンのタイト化 */
         .filter-btn {
+            flex: 1;           /* すべてのボタンを均等な幅に広げる */
+            text-align: center;
             background-color: var(--btn-bg);
             color: var(--text-color);
             border: none;
-            padding: 6px 12px;
+            padding: 6px 4px;  /* 左右パディングを限界まで詰めて文字落ちを防ぐ */
             border-radius: 20px;
-            font-size: 13px;
+            font-size: 11px;   /* スマホの画面幅(360px〜)でも1行に収まるサイズ */
             cursor: pointer;
             transition: background-color 0.2s;
+            white-space: nowrap; /* ボタン内での改行も防ぐ */
         }
 
         .filter-btn.active {
@@ -119,7 +117,7 @@
             bottom: 12px;
             left: 12px;
             right: 12px;
-            font-size: 16px;
+            font-size: 15px;
             font-weight: bold;
             color: #ffffff;
             text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
@@ -161,8 +159,6 @@
     </style>
 </head>
 <body>
-
-    <h1>キャッシュレス カンペ</h1>
 
     <!-- 絞り込みボタン -->
     <div class="filter-container">
